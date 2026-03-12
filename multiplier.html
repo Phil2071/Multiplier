@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>✕ Multiply ✕</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #0a0a0f;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, #2a003a 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, #001a3a 0%, transparent 50%),
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px),
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.015) 40px, rgba(255,255,255,0.015) 41px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Courier New', monospace;
+      padding: 2rem;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .title h1 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 0 8px #ff3cac, 0 0 20px #ff3cac, 0 0 40px #ff3cac;
+      line-height: 1.1;
+    }
+
+    .title p {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      color: #2bd2ff;
+      text-shadow: 0 0 8px #2bd2ff, 0 0 20px #2bd2ff;
+      opacity: 0.8;
+    }
+
+    .inputs {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .input-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      font-weight: 700;
+    }
+
+    .input-label.a { color: #ff3cac; text-shadow: 0 0 8px #ff3cac, 0 0 20px #ff3cac; }
+    .input-label.b { color: #2bd2ff; text-shadow: 0 0 8px #2bd2ff, 0 0 20px #2bd2ff; }
+    .input-label.c { color: #f9f871; text-shadow: 0 0 8px #f9f871, 0 0 20px #f9f871; }
+
+    input[type="text"] {
+      width: 110px;
+      height: 70px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 8px;
+      font-size: 2rem;
+      font-weight: 900;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      outline: none;
+      transition: box-shadow 0.2s;
+    }
+
+    input.a {
+      border: 2px solid #ff3cac;
+      color: #ff3cac;
+      box-shadow: inset 0 0 10px #7a0050, 0 0 12px #ff3cac55;
+    }
+    input.a:focus {
+      box-shadow: inset 0 0 10px #7a0050, 0 0 8px #ff3cac, 0 0 20px #ff3cac, 0 0 40px #ff3cac;
+    }
+
+    input.b {
+      border: 2px solid #2bd2ff;
+      color: #2bd2ff;
+      box-shadow: inset 0 0 10px #0060a0, 0 0 12px #2bd2ff55;
+    }
+    input.b:focus {
+      box-shadow: inset 0 0 10px #0060a0, 0 0 8px #2bd2ff, 0 0 20px #2bd2ff, 0 0 40px #2bd2ff;
+    }
+
+    input.c {
+      border: 2px solid #f9f871;
+      color: #f9f871;
+      box-shadow: inset 0 0 10px #7a7800, 0 0 12px #f9f87155;
+    }
+    input.c:focus {
+      box-shadow: inset 0 0 10px #7a7800, 0 0 8px #f9f871, 0 0 20px #f9f871, 0 0 40px #f9f871;
+    }
+
+    .equation {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 2rem;
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+    }
+
+    .eq-num { font-weight: 700; font-size: 1.1rem; }
+    .eq-num.a { color: #ff3cac; }
+    .eq-num.b { color: #2bd2ff; }
+    .eq-num.c { color: #f9f871; }
+    .eq-op { color: rgba(255,255,255,0.3); font-size: 1.4rem; }
+
+    button {
+      padding: 1rem 3rem;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-family: 'Courier New', monospace;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button.active {
+      background: linear-gradient(135deg, #ff3cac, #784ba0, #2bd2ff);
+      box-shadow: 0 0 20px #ff3cac88, 0 0 40px #2bd2ff44;
+    }
+
+    button.active:hover { transform: scale(1.05); }
+
+    button.inactive {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.2);
+      cursor: not-allowed;
+    }
+
+    .result {
+      margin-top: 2.5rem;
+      text-align: center;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .result-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.4em;
+      color: #f9f871;
+      text-shadow: 0 0 8px #f9f871, 0 0 20px #f9f871, 0 0 40px #f9f871;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-number {
+      font-size: clamp(3rem, 10vw, 6rem);
+      font-weight: 900;
+      color: #f9f871;
+      text-shadow: 0 0 8px #f9f871, 0 0 20px #f9f871, 0 0 40px #f9f871;
+      line-height: 1;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .result-equation {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.2em;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.7; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="title">
+    <h1>✕ MULTIPLY ✕</h1>
+    <p>ENTER THREE NUMBERS</p>
+  </div>
+
+  <div class="inputs">
+    <div class="input-group">
+      <div class="input-label a">NUMBER A</div>
+      <input id="numA" class="a" type="text" placeholder="0" />
+    </div>
+    <div class="input-group">
+      <div class="input-label b">NUMBER B</div>
+      <input id="numB" class="b" type="text" placeholder="0" />
+    </div>
+    <div class="input-group">
+      <div class="input-label c">NUMBER C</div>
+      <input id="numC" class="c" type="text" placeholder="0" />
+    </div>
+  </div>
+
+  <div class="equation">
+    <span id="eqA" class="eq-num a">?</span>
+    <span class="eq-op">×</span>
+    <span id="eqB" class="eq-num b">?</span>
+    <span class="eq-op">×</span>
+    <span id="eqC" class="eq-num c">?</span>
+  </div>
+
+  <button id="calcBtn" class="inactive" disabled>⚡ CALCULATE</button>
+
+  <div id="result" class="result" style="display:none;">
+    <div class="result-label">RESULT</div>
+    <div id="resultNumber" class="result-number"></div>
+    <div id="resultEquation" class="result-equation"></div>
+  </div>
+
+  <script>
+    const inputs = [
+      document.getElementById('numA'),
+      document.getElementById('numB'),
+      document.getElementById('numC'),
+    ];
+    const eqSpans = [
+      document.getElementById('eqA'),
+      document.getElementById('eqB'),
+      document.getElementById('eqC'),
+    ];
+    const btn = document.getElementById('calcBtn');
+    const resultDiv = document.getElementById('result');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultEquation = document.getElementById('resultEquation');
+
+    function isValid(v) {
+      return v !== "" && !isNaN(Number(v));
+    }
+
+    function updateUI() {
+      inputs.forEach((inp, i) => {
+        eqSpans[i].textContent = (inp.value !== "" && isValid(inp.value)) ? Number(inp.value) : "?";
+      });
+
+      const allFilled = inputs.every(inp => isValid(inp.value));
+      btn.disabled = !allFilled;
+      btn.className = allFilled ? "active" : "inactive";
+      resultDiv.style.display = "none";
+    }
+
+    inputs.forEach(inp => {
+      inp.addEventListener('input', updateUI);
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') btn.click();
+      });
+    });
+
+    btn.addEventListener('click', () => {
+      if (inputs.every(inp => isValid(inp.value))) {
+        const a = Number(inputs[0].value);
+        const b = Number(inputs[1].value);
+        const c = Number(inputs[2].value);
+        const res = a * b * c;
+
+        resultDiv.style.display = "none";
+        setTimeout(() => {
+          resultNumber.textContent = Number.isInteger(res) ? res.toLocaleString() : res.toFixed(4);
+          resultEquation.textContent = `${a} × ${b} × ${c}`;
+          resultDiv.style.display = "block";
+          // Re-trigger animation
+          resultDiv.style.animation = "none";
+          resultDiv.offsetHeight;
+          resultDiv.style.animation = "";
+        }, 50);
+      }
+    });
+  </script>
+</body>
+</html>
